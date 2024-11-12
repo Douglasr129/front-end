@@ -1,0 +1,21 @@
+<ul class="navbar-nav">
+    @switch (usuarioLogado()) {
+        @case (false) {
+            <li class="nav-item" style="padding-right: 30px;">
+                <a class="btn btn-primary" [routerLink]="['/account/sign-in']">Entrar</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-success" [routerLink]="['/account/sign-up']">Crie sua conta</a>
+            </li>
+        }
+        @case (true) {
+            <li class="nav-item">
+                <a class="nav-link text-dark" id="saudacaoUsuario" href="javascript:void(0)">{{ email }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="javascript:void(0)" (click)="logout()">
+                    Sair <span class="fas fa-sign-out-alt"></span></a>
+            </li>
+        }
+    }
+</ul>
