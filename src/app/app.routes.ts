@@ -6,5 +6,8 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     {path: 'account',
         loadChildren: () => import('./account/account.routing').then(mod => mod.accountRoutes)
+    },
+    {path: 'fornecedores',
+        loadChildren: () => import('./fornecedor/fornecedor.routing').then(mod => mod.FornecedorRoutes)
     }
 ];

@@ -11,12 +11,7 @@ export class AccountService extends BaseService {
 
     signIn(user: User): Observable<User> {
         let response = this.http
-            .post<User>(this.UrlServiceV1 + 'nova-conta', user, this.GettingHeaderJson())
-            .pipe(
-                map(this.extractData),
-                catchError(this.serviceError)
-            );
-
+        .post<User>(this.UrlServiceV1 + 'entrar', user, this.GettingHeaderJson());
         return response;
 
     }

@@ -75,7 +75,8 @@ export class SignInComponent {
     this.errors = [];
 
     this.accountService.LocalStorage.salvarDadosLocaisUsuario(response);
-
+    this.toastr.success('Login realizado com Sucesso!', 'Bem vindo!!!');
+    this.router.navigate(['/home']);
   }
 
   processFail(fail: any) {

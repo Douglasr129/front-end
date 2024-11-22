@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { User } from '../models/user';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../services/account.service';
-import { DisplayMessage, GenericValidator, matchPasswordValidator, passwordStrength, ValidationMessages } from '../../utils/generic-form-validation';
+import { DisplayMessage, GenericValidator, matchPassword, passwordStrength, ValidationMessages } from '../../utils/generic-form-validation';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -46,15 +46,19 @@ export class SignUpComponent implements OnInit, AfterViewInit {
       },
       confirmPassword: {
         required: 'Informe a senha novamente',
-        matchPasswordValidator: 'As senhas não conferem'
+        matchPasswordValidator: 'As senhas não conferem',
+        matchPassword:'As senhas não conferem'
       }
     };
     this.genericValidator = new GenericValidator(this.validationMessages);
+    let senha = new FormControl('', [Validators.required, passwordStrength(6, 15)]);
+    let senhaConfirm = new FormControl('', [Validators.required, passwordStrength(6, 15), matchPassword(senha)]);
+
     this.signUpForm = this.fb.group({ 
       email: this.fb.control('', [Validators.required, Validators.email]), 
-      password: this.fb.control('', [Validators.required, passwordStrength(6, 15)]), 
-      confirmPassword: this.fb.control('', [Validators.required]) 
-    }, { validators: matchPasswordValidator('password', 'confirmPassword') });
+      password: senha, 
+      confirmPassword: senhaConfirm
+    });
   }
 
   ngOnInit(): void { }
