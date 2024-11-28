@@ -1,49 +1,49 @@
 import { Routes } from '@angular/router';
-import { FornecedorComponent } from './fornecedor.component';
+import { ProdutoComponent } from './produto.component';
 import { ListaComponent } from './lista/lista.component';
 import { NovoComponent } from './novo/novo.component';
-import { FornecedorGuard } from './services/fornecedor.guard';
+import { ProdutoGuard } from './services/produto.guard';
 import { EditarComponent } from './editar/editar.component';
-import { FornecedorResolver } from './services/fornecedor.resolver';
+import { ProdutoResolver } from './services/produto.resolver';
 import { DetalhesComponent } from './detalhes/detalhes.component';
 import { ExcluirComponent } from './excluir/excluir.component';
 
 const routes: Routes = [
     {
-        path: '', component: FornecedorComponent,
+        path: '', component: ProdutoComponent,
         children: [
             { path: 'listar-todos', component: ListaComponent },
             {
                 path: 'adicionar-novo', component: NovoComponent,
-                canDeactivate: [FornecedorGuard],
-                canActivate: [FornecedorGuard],
-                data: [{ claim: { nome: 'Fornecedor', valor: 'Adicionar' } }]
+                canDeactivate: [ProdutoGuard],
+                canActivate: [ProdutoGuard],
+                data: [{ claim: { nome: 'Produto', valor: 'Adicionar' } }]
             },
             {
                 path: 'editar/:id', component: EditarComponent,
-                canActivate: [FornecedorGuard],
-                data: [{ claim: { nome: 'Fornecedor', valor: 'Atualizar' } }],
+                canActivate: [ProdutoGuard],
+                data: [{ claim: { nome: 'Produto', valor: 'Atualizar' } }],
                 resolve: {
-                    fornecedor: FornecedorResolver
+                    produto: ProdutoResolver
                 }
             },
             {
                 path: 'detalhes/:id', component: DetalhesComponent,
                 resolve: {
-                    fornecedor: FornecedorResolver
+                    produto: ProdutoResolver
                 }
             },
             {
                 path: 'excluir/:id', component: ExcluirComponent,
-                canActivate: [FornecedorGuard],
-                data: [{ claim: { nome: 'Fornecedor', valor: 'Excluir' } }],
+                canActivate: [ProdutoGuard],
+                data: [{ claim: { nome: 'Produto', valor: 'Excluir' } }],
                 resolve: {
-                    fornecedor: FornecedorResolver
+                    produto: ProdutoResolver
                 }
             }
         ], 
-        providers: [FornecedorResolver, FornecedorGuard]
+        providers: [ProdutoResolver, ProdutoGuard]
     },
 ];
 
-export const FornecedorRoutes = routes;
+export const ProdutoRoutes = routes;

@@ -27,7 +27,7 @@ export abstract class BaseService {
     };
   }
   protected extractData(response: any) {
-    return response.data || {}
+    return response.data || response
   }
   protected serviceError(response: Response | any) {
     let customError: string[] = [];

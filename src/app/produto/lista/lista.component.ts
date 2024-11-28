@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Fornecedor } from '../models/fornecedor';
-import { FornecedorService } from '../services/fornecedor.service';
+import { Produto } from '../models/produto';
+import { ProdutoService } from '../services/produto.service';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-lista',
@@ -13,15 +14,16 @@ import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
   providers:[NgxMaskDirective]
 })
 export class ListaComponent {
-  public fornecedores: Fornecedor[] = [];
+  imagens: string = environment.imagensUrl;
+  produtos: Produto[] = [];
   errorMessage: string = "";
 
-  constructor(private fornecedorService: FornecedorService) { }
+  constructor(private produtoService: ProdutoService) { }
 
   ngOnInit(): void {
-    this.fornecedorService.obterTodos()
+    this.produtoService.obterTodos()
       .subscribe({
-        next: fornecedores => this.fornecedores = fornecedores,
+        next: produto => this.produtos = produto,
         error: () => this.errorMessage
       });
   }

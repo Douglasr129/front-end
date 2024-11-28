@@ -1,13 +1,15 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
 
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AccountGuard } from './account/services/account.guard';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { ErrorInterceptor } from './services/error.handler.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +29,9 @@ export const appConfig: ApplicationConfig = {
       maxOpened: 4
      }),
      AccountGuard,
-     provideEnvironmentNgxMask()
+     provideEnvironmentNgxMask(),
+     importProvidersFrom(NgxSpinnerModule.forRoot(/*config*/)),
+     provideAnimations(),
+     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
   ]
 };

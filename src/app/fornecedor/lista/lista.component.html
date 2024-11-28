@@ -22,7 +22,7 @@
                     {{ fornecedor.nome }}
                 </td>
                 <td>
-                    {{fornecedor.documento }}
+                    {{fornecedor.documento! | mask: "000.000.000-00 || 00.000.000/0000-00"}}
                 </td>
                 <td>
                     <input [checked]="fornecedor.ativo" class="check-box" disabled="disabled" type="checkbox">

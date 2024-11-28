@@ -7,7 +7,7 @@ import { Fornecedor } from '../models/fornecedor';
 import { DisplayMessage, GenericValidator, cpfValidator, ValidationMessages, cnpjValidator } from '../../utils/generic-form-validation';
 import { CommonModule } from '@angular/common';
 import { fromEvent, merge, Observable } from 'rxjs';
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { StringUtils } from '../../utils/string-utils';
 import { CepConsulta } from '../models/endereco';
 

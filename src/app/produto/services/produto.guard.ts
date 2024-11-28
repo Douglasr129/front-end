@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanActivateFn, CanDeactivate, GuardResult, MaybeAsync, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, GuardResult, MaybeAsync, Router, RouterStateSnapshot } from '@angular/router';
 import { LocalStorageUtils } from '../../utils/localstorage';
 import { NovoComponent } from '../novo/novo.component';
+
 @Injectable()
-export class FornecedorGuard implements CanActivate, CanDeactivate<NovoComponent> {
+export class ProdutoGuard implements CanActivate, CanDeactivate<NovoComponent> {
   localStorageUtils = new LocalStorageUtils
   ();
   constructor(private router:Router) {}
