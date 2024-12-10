@@ -90,27 +90,13 @@
                 <table class="table table-hover">
                     <thead class="thead-dark">
                         <tr>
-                            <th>
-                                Logradouro
-                            </th>
-                            <th>
-                                Numero
-                            </th>
-                            <th>
-                                Complemento
-                            </th>
-                            <th>
-                                Bairro
-                            </th>
-                            <th>
-                                Cep
-                            </th>
-                            <th>
-                                Cidade
-                            </th>
-                            <th>
-                                Estado
-                            </th>
+                            <th>Logradouro</th>
+                            <th>Numero</th>
+                            <th>Complemento </th>
+                            <th>Bairro</th>
+                            <th>Cep</th>
+                            <th>Cidade</th>
+                            <th>Estado</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -150,7 +136,7 @@
         </div>
     </form>
 
-    <!-- <lista-produto [produtos]="fornecedor?.['produtos']"></lista-produto> -->
+    <lista-produtos [produtos]="fornecedor?.['produtos']"></lista-produtos>
 
     <ng-template #content let-c="close" let-d="dismiss">
         <div class="modal-header">

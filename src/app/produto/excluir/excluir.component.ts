@@ -4,17 +4,18 @@ import { ToastrService } from 'ngx-toastr';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { Produto } from '../models/produto';
 import { ProdutoService } from '../services/produto.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-excluir',
   standalone: true,
-  imports: [RouterLink, NgxMaskPipe],
+  imports: [NgxMaskPipe],
   templateUrl: './excluir.component.html',
   styleUrl: './excluir.component.scss',
   providers:[NgxMaskDirective]
 })
 export class ExcluirComponent {
-  imagens: string = '';
+  imagens: string = environment.imagensUrl;
   produto: Produto | any;
 
   constructor(private produtoService: ProdutoService,
@@ -34,13 +35,8 @@ export class ExcluirComponent {
   }
 
   public sucessoExclusao(evento: any) {
-
-    const toast = this.toastr.success('Produto excluido com Sucesso!', 'Good bye :D');
-    if (toast) {
-      toast.onHidden.subscribe(() => {
-        this.router.navigate(['/produtos/listar-todos']);
-      });
-    }
+    this.toastr.success('Produto excluido com Sucesso!', 'Good bye :D');
+    this.router.navigate(['/produtos/listar-todos']);
   }
 
   public falha() {

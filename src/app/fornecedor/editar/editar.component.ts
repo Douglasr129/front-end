@@ -1,4 +1,4 @@
-import { Component, ElementRef, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, TemplateRef, ViewChildren } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControlName, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Fornecedor } from '../models/fornecedor';
 import { CepConsulta, Endereco } from '../models/endereco';
@@ -12,14 +12,17 @@ import { CommonModule } from '@angular/common';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { NgxSpinner, NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner'
+import { ProdutoComponent } from "../../produto/produto.component";
+import { ListaProdutosComponent } from "../produtos/lista-produtos.component";
 
 @Component({
   selector: 'app-editar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgxMaskDirective, NgxSpinnerComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgxMaskDirective, NgxSpinnerComponent, ListaProdutosComponent],
   templateUrl: './editar.component.html',
   styleUrl: './editar.component.scss',
-  providers: [provideNgxMask(),NgxSpinnerService]
+  providers: [provideNgxMask(),NgxSpinnerService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class EditarComponent {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[] | any;
@@ -85,7 +88,6 @@ export class EditarComponent {
 
   ngOnInit() {
 
-    /* this.spinner.show(); */
     this.spinner.show(); 
 
     this.fornecedorForm = this.fb.group({
@@ -109,7 +111,6 @@ export class EditarComponent {
     });
 
     this.preencherForm();
-
     setTimeout(() => {
       this.spinner.hide(); 
     }, 1000);

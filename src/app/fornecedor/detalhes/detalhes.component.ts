@@ -3,11 +3,12 @@ import { Fornecedor } from '../models/fornecedor';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { ListaProdutosComponent } from "../produtos/lista-produtos.component";
 
 @Component({
   selector: 'app-detalhes',
   standalone: true,
-  imports: [RouterLink, NgxMaskPipe],
+  imports: [RouterLink, NgxMaskPipe, ListaProdutosComponent],
   templateUrl: './detalhes.component.html',
   styleUrl: './detalhes.component.scss',
   providers:[NgxMaskDirective]
@@ -20,7 +21,6 @@ export class DetalhesComponent {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer) {
       this.fornecedor = this.route.snapshot.data['fornecedor'];
-      console.log(this.EnderecoCompleto());
       this.enderecoMap = this.sanitizer.bypassSecurityTrustResourceUrl("https://www.google.com/maps/embed/v1/place?q=" + this.EnderecoCompleto() + "&key=AIzaSyAP0WKpL7uTRHGKWyakgQXbW6FUhrrA5pE");
   }
 
