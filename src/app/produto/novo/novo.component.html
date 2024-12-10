@@ -19,14 +19,14 @@
 
                 <div class="form-group">
                     <label class="control-label">Fornecedor</label>
-                    <select class="form-control" id="fornecedorId" formControlName="fornecedorId" [ngClass]="{'is-invalid': displayMessage?.['fornecedorId'] }">
+                    <select class="form-control" id="fornecedorId" formControlName="fornecedorId" [ngClass]="{'is-invalid': displayMessage['fornecedorId'] }">
                         @for (fornecedor of fornecedores; track $index) {
                             <option value="{{ fornecedor?.['id'] }}">{{ fornecedor?.['nome'] }}</option>
                             }
                     </select>
-                    @if(displayMessage?.['fornecedorId']){
+                    @if(displayMessage['fornecedorId']){
                         <span class="text-danger">
-                            <p [innerHTML]="displayMessage?.['fornecedorId']"></p>
+                            <p [innerHTML]="displayMessage['fornecedorId']"></p>
                         </span>
                     }
                 </div>
@@ -34,10 +34,10 @@
                 <div class="form-group">
                     <label class="control-label">Nome</label>
                     <div>
-                        <input class="form-control" id="nome" type="text" placeholder="Nome (requerido)" formControlName="nome" [ngClass]="{'is-invalid': displayMessage?.['nome'] }" />
-                        @if(displayMessage?.['nome']){
+                        <input class="form-control" id="nome" type="text" placeholder="Nome (requerido)" formControlName="nome" [ngClass]="{'is-invalid': displayMessage['nome'] }" />
+                        @if(displayMessage['nome']){
                             <span class="text-danger">
-                                <p [innerHTML]="displayMessage?.['nome']"></p>
+                                <p [innerHTML]="displayMessage['nome']"></p>
                             </span>
                         }
                     </div>
@@ -46,10 +46,10 @@
                 <div class="form-group">
                     <label class="control-label">Descrição</label>
                     <div>
-                        <textarea cols="40" rows="5" maxlength="1000" class="form-control" id="descricao" placeholder="Descrição (requerido)" formControlName="descricao" [ngClass]="{'is-invalid': displayMessage?.['descricao'] }"></textarea>
-                       @if(displayMessage?.['descricao']){
+                        <textarea cols="40" rows="5" maxlength="1000" class="form-control" id="descricao" placeholder="Descrição (requerido)" formControlName="descricao" [ngClass]="{'is-invalid': displayMessage['descricao'] }"></textarea>
+                       @if(displayMessage['descricao']){
                            <span class="text-danger">
-                               <p [innerHTML]="displayMessage?.['descricao']"></p>
+                               <p [innerHTML]="displayMessage['descricao']"></p>
                             </span>
                        }
                     </div>
@@ -59,39 +59,56 @@
                     <label class="control-label">Imagem do Produto</label>
 
                     <div class="custom-file">
-                        <input type="file" accept="image/jpeg,image/png" class="custom-file-input" id="imagem" formControlName="imagem" (change)="fileChangeEvent($event)" [ngClass]="{'is-invalid': displayMessage?.['imagem'] }">
+                        <input type="file" accept="image/jpeg,image/png" class="custom-file-input" id="imagem" formControlName="imagem" [textContent]="imagemNome" (change)="fileChangeEvent($event)" [ngClass]="{'is-invalid': displayMessage['imagem'] }">
                         <label data-browse="Procurar" style="width: 400px" class="custom-file-label"></label>
                         @if(imagemNome){
                             <span><br>{{ imagemNome }}<br></span>
                         }
-                        @if(displayMessage?.['imagem']){
+                        @if(displayMessage['imagem']){
                             <span class="text-danger">
-                                <p [innerHTML]="displayMessage?.['imagem']"></p>
+                                <p [innerHTML]="displayMessage['imagem']"></p>
                             </span>
                         }
                     </div>
 
-                    @if(imagemNome){
+
                         <div class="row">
                             <div class="col col-md-6">
-                               <!--  <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="false" [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 3" [resizeToWidth]="256" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false"
-                                    [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'left'" [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
-                                    (loadImageFailed)="loadImageFailed()"></image-cropper> -->
+                                <image-cropper 
+                                    [imageChangedEvent]="imageChangedEvent" 
+                                    [maintainAspectRatio]="false" 
+                                    [containWithinAspectRatio]="containWithinAspectRatio" 
+                                    [aspectRatio]="4 / 3" 
+                                    [resizeToWidth]="256" 
+                                    [cropperMinWidth]="128" 
+                                    [onlyScaleDown]="true" 
+                                    [roundCropper]="false"
+                                    [canvasRotation]="canvasRotation" 
+                                    [transform]="transform" 
+                                    [alignImage]="'left'" 
+                                    output="base64"
+                                    [style.display]="showCropper ? null : 'none'" 
+                                    format="png" 
+                                    (imageCropped)="imageCropped($event)" 
+                                    (imageLoaded)="imageLoaded()" 
+                                    (cropperReady)="cropperReady($event)"
+                                    (loadImageFailed)="loadImageFailed()">
+                                </image-cropper>
                             </div>
                             <div class="col col-md-6">
                                 <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
                             </div>
                         </div>
-                    }
+
                 </div>
 
                 <div class="form-group">
                     <label class="control-label">Valor</label>
                     <div>
-                        <input class="form-control" id="valor" type="text" placeholder="Valor (requerido)" formControlName="valor" [ngClass]="{'is-invalid': displayMessage?.['valor'] }" />
-                        @if(displayMessage?.['valor']){
+                        <input class="form-control" id="valor" type="text" placeholder="Valor (requerido)" formControlName="valor" [ngClass]="{'is-invalid': displayMessage['valor'] }" />
+                        @if(displayMessage['valor']){
                             <span class="text-danger">
-                                <p [innerHTML]="displayMessage?.['valor']"></p>
+                                <p [innerHTML]="displayMessage['valor']"></p>
                             </span>
                         }
                     </div>

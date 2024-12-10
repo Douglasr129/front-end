@@ -29,7 +29,7 @@
         <br>
         <iframe width="100%" height="450" frameborder="0" style="border:0; padding-bottom: 50px;" [src]="enderecoMap" allowfullscreen></iframe>
     </div>
-    <!-- <lista-produto [produtos]="fornecedor.produtos"></lista-produto> -->
+    <lista-produtos [produtos]="fornecedor.produtos"></lista-produtos>
 
     <div>
         <a class="btn btn-dark" [routerLink]="['/fornecedores/editar',fornecedor?.['id']]">Editar</a>&nbsp;

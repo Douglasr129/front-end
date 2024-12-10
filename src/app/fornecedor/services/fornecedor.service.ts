@@ -25,7 +25,6 @@ export class FornecedorService extends BaseService {
   }
 
   novoFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
-    console.log(this.GettingAuthHeaderJson())
     return this.http
       .post(this.UrlServiceV1 + "fornecedores", fornecedor, this.GettingAuthHeaderJson())
       .pipe(

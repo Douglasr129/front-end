@@ -2,16 +2,15 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Produto } from '../models/produto';
 import { ProdutoService } from '../services/produto.service';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-lista',
   standalone: true,
-  imports: [RouterLink,NgxMaskPipe],
+  imports: [RouterLink],
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.scss',
-  providers:[NgxMaskDirective]
+  providers:[]
 })
 export class ListaComponent {
   imagens: string = environment.imagensUrl;

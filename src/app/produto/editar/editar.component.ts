@@ -1,28 +1,26 @@
-import { Component, ElementRef, TemplateRef, ViewChildren } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControlName, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ElementRef, ViewChildren } from '@angular/core';
+import { FormBuilder, FormControlName, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProdutoService } from '../services/produto.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
-import { cnpjValidator, cpfValidator, DisplayMessage, GenericValidator, ValidationMessages } from '../../utils/generic-form-validation';
-import { StringUtils } from '../../utils/string-utils';
+import { DisplayMessage, GenericValidator, ValidationMessages } from '../../utils/generic-form-validation';
 import { CommonModule } from '@angular/common';
 import { fromEvent, merge, Observable } from 'rxjs';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { NgxSpinner, NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner'
+import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner'
 import { Fornecedor, Produto } from '../models/produto';
 import { CurrencyUtils } from '../../utils/currency-utils';
 import { environment } from '../../../environments/environment';
+import { ProdutoBaseComponent } from '../produto-form.base.component';
 
 @Component({
   selector: 'app-editar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgxMaskDirective, NgxSpinnerComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgxSpinnerComponent],
   templateUrl: './editar.component.html',
   styleUrl: './editar.component.scss',
-  providers: [provideNgxMask(),NgxSpinnerService]
+  providers: [NgxSpinnerService]
 })
-export class EditarComponent {
+export class EditarComponent extends ProdutoBaseComponent {
   imagens: string = environment.imagensUrl;
 
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[] | any;
@@ -32,51 +30,21 @@ export class EditarComponent {
   imagemNome: string | any;
   imagemOriginalSrc: string | any;
 
-  mudancasNaoSalvas?: boolean;
-  produtoForm: FormGroup | any;
-  errors: [] = [];
-  produto: Produto | any;
-  fornecedores: Fornecedor | any
-
-  validationMessages: ValidationMessages | any;
-  genericValidator: GenericValidator | any;
-  displayMessage: DisplayMessage | any;
-
   constructor(private fb: FormBuilder,
     private produtoService: ProdutoService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    private spinner: NgxSpinnerService) {
 
-
-    this.validationMessages = {
-      nome: {
-        required: 'Informe o Nome',
-        minLength:'Nome deve conter entre 2 e 200 caracteres',
-        maxLength:'Nome deve conter entre 2 e 200 caracteres'
-      },
-      descricao: {
-        required: 'Informe o Nome',
-        minLength:'Descricao deve conter entre 2 e 1000 caracteres',
-        maxLength:'Descricao deve conter entre 2 e 1000 caracteres'
-      },
-      imagem: {
-        required: 'Informe a imagem'
-      },
-      valor: {
-        required: 'Informe o valor'
-      },
-
-    };
-    this.genericValidator = new GenericValidator(this.validationMessages);
-    
+    super();
     this.produto = this.route.snapshot.data['produto'];
   }
 
-  
+
 
   ngOnInit(): void {
-
+    this.spinner.show();
     this.produtoService.obterFornecedores()
       .subscribe(
         fornecedores => this.fornecedores = fornecedores);
@@ -101,23 +69,16 @@ export class EditarComponent {
 
     // utilizar o [src] na imagem para evitar que se perca após post
     this.imagemOriginalSrc = this.imagens + this.produto.imagem;
+
+    setTimeout(() => {
+      this.spinner.hide();
+    }, 1000);
   }
 
   ngAfterViewInit(): void {
-    this.configurarElementosValidacao()
+    this.configurarMensagensValidacaoBase(this.produtoForm.valid)
   }
-  configurarElementosValidacao() {
-    const controlBlurs: Observable<any>[] = this.formInputElements
-      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
 
-    merge(...controlBlurs).subscribe(() => {
-      this.validarFormulario();
-    });
-  }
-  validarFormulario() {
-    this.displayMessage = this.genericValidator.processarMensagens(this.produtoForm);
-    this.mudancasNaoSalvas = true;
-  }
 
   editarProduto() {
     if (this.produtoForm.dirty && this.produtoForm.valid) {
@@ -131,10 +92,10 @@ export class EditarComponent {
       this.produto.valor = CurrencyUtils.StringParaDecimal(this.produto.valor);
 
       this.produtoService.atualizarProduto(this.produto)
-        .subscribe(
-          sucesso => { this.processarSucesso(sucesso) },
-          falha => { this.processarFalha(falha) }
-        );
+        .subscribe({
+          next: sucesso => { this.processarSucesso(sucesso) },
+          error: falha => { this.processarFalha(falha) }
+        });
 
       this.mudancasNaoSalvas = false;
     }
@@ -143,7 +104,6 @@ export class EditarComponent {
   processarSucesso(response: any) {
     this.produtoForm.reset();
     this.errors = [];
-
     let toast = this.toastr.success('Produto editado com sucesso!', 'Sucesso!');
     if (toast) {
       toast.onHidden.subscribe(() => {
@@ -159,15 +119,23 @@ export class EditarComponent {
 
   upload(file: any) {
     this.imagemNome = file[0].name;
-
     var reader = new FileReader();
     reader.onload = this.manipularReader.bind(this);
-    reader.readAsBinaryString(file[0]);
+    reader.readAsArrayBuffer(file[0]);
   }
 
   manipularReader(readerEvt: any) {
-    var binaryString = readerEvt.target.result;
+    var arrayBuffer = readerEvt.target.result;
+    var binaryString = this.arrayBufferToBinaryString(arrayBuffer);
     this.imageBase64 = btoa(binaryString);
     this.imagemPreview = "data:image/jpeg;base64," + this.imageBase64;
+  }
+  arrayBufferToBinaryString(buffer: ArrayBuffer): string {
+    var binary = ''; var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength; 
+    for (var i = 0; i < len; i++) { 
+      binary += String.fromCharCode(bytes[i]); 
+    } 
+    return binary;
   }
 }

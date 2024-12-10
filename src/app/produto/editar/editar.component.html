@@ -1,5 +1,7 @@
 <div class="container main-container">
 
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-scale" [fullScreen] = "true"><p style="color: white" > Carregando... </p></ngx-spinner>
+
     <h3>Editar Produto - {{ produto?.['nome'] }}</h3>
 
     <hr>
@@ -55,22 +57,30 @@
                        }
                     </div>
                 </div>
-
-                <div *ngIf="!imagemPreview" class="form-group">
-                    <label>Imagem Atual</label><br>
-                    <img [src]="imagemOriginalSrc" style="width: 70px; height: 100px">
-                </div>
-                <div *ngIf="imagemPreview" class="form-group">
-                    <label>Nova Imagem</label><br>
-                    <img [src]="imagemPreview" style="width: 70px; height: 100px" />
-                </div>
+                @if(!imagemPreview){
+                    <div class="form-group">
+                        <label>Imagem Atual</label><br>
+                        <img [src]="imagemOriginalSrc" style="width: 70px; height: 100px">
+                    </div>
+                }
+                @else {                    
+                    <div class="form-group">
+                        <label>Nova Imagem</label><br>
+                        <img [src]="imagemPreview" style="width: 70px; height: 100px" />
+                    </div>
+                }
 
                 <div class="form-group">
                     <label class="control-label">Imagem do Produto</label>
 
                     <div class="custom-file">
-                        <input type="file" accept="image/jpeg,image/png" class="custom-file-input" id="imagem" formControlName="imagem" #fileInput (change)="upload(fileInput.files)" [ngClass]="{'is-invalid': displayMessage?.['imagem'] }">
-                        <label data-browse="Procurar" style="width: 400px" class="custom-file-label"></label>
+                        <input type="file" accept="image/jpeg,image/png"
+                         class="custom-file-input" id="imagem" 
+                         formControlName="imagem" #fileInput 
+                         (change)="upload(fileInput.files)"
+                          [ngClass]="{'is-invalid': displayMessage?.['imagem'] }">
+                        <label data-browse="Procurar" style="width: 400px" 
+                        class="custom-file-label"></label>
                         @if(displayMessage?.['imagem']){
                             <span class="text-danger">
                                 <p [innerHTML]="displayMessage?.['imagem']"></p>
@@ -99,7 +109,7 @@
 
                 <div class="form-group">
                     <input type="submit" [disabled]="!produtoForm.valid" value="Editar" class="btn btn-primary">&nbsp;
-                    <a class="btn btn-info" href="/produtos/listar-todos">Voltar</a>
+                    <a class="btn btn-info" [routerLink]="['/produtos/listar-todos']">Voltar</a>
                 </div>
             </form>
         </div>

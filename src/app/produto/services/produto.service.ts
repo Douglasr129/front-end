@@ -41,10 +41,8 @@ export class ProdutoService extends BaseService {
 
   excluirProduto(id: string): Observable<Produto> {
       return this.http
-          .delete(this.UrlServiceV1 + "produtos/" + id, super.GettingAuthHeaderJson())
-          .pipe(
-              map(super.extractData),
-              catchError(super.serviceError));
+          .delete<Produto>(this.UrlServiceV1 + "produtos/" + id, super.GettingAuthHeaderJson())
+          .pipe(catchError(super.serviceError));
   }    
 
   obterFornecedores(): Observable<Fornecedor[]> {

@@ -3,7 +3,7 @@ import { FormBuilder, FormControlName, FormGroup, ReactiveFormsModule, Validator
 import { User } from '../models/user';
 import { AccountService } from '../services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DisplayMessage, passwordStrength } from '../../utils/generic-form-validation';
+import { DisplayMessage, GenericValidator, passwordStrength } from '../../utils/generic-form-validation';
 import { CommonModule } from '@angular/common';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { ToastrService } from 'ngx-toastr';
@@ -29,6 +29,7 @@ export class SignInComponent {
   returnUrl: string | any;
   validationMessages: { email: { required: string; email: string; }; password: { required: string; rangeLength: string; }; };
   displayMessage: DisplayMessage | any;
+  genericValidator: GenericValidator | any;
 
   constructor(private fb: FormBuilder,
     private accountService: AccountService,
@@ -46,6 +47,7 @@ export class SignInComponent {
       }
     };
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'];
+    this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
   ngOnInit(): void {
@@ -73,10 +75,9 @@ export class SignInComponent {
   processSuccess(response: any) {
     this.loginForm.reset();
     this.errors = [];
-
     this.accountService.LocalStorage.salvarDadosLocaisUsuario(response);
     this.toastr.success('Login realizado com Sucesso!', 'Bem vindo!!!');
-    this.router.navigate(['/home']);
+    this.returnUrl ? this.router.navigate([this.returnUrl]) : this.router.navigate(['/home']);
   }
 
   processFail(fail: any) {
